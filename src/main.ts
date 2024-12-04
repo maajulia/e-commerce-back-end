@@ -7,7 +7,7 @@ app.use(express.json())
 app.use(cors())
 
 
-app.get("/produtos", async (req, res) => {
+app.get("/roupas", async (req, res) => {
     try {
         const connection = await mysql.createConnection({
             host: process.env.dbhost ? process.env.dbhost : "localhost",
@@ -16,14 +16,14 @@ app.get("/produtos", async (req, res) => {
             database: process.env.dbname ? process.env.dbname : "banco1022a",
             port: process.env.dbport ? parseInt(process.env.dbport) : 3306
         })
-        const [result, fields] = await connection.query("SELECT * from produtos")
+        const [result, fields] = await connection.query("SELECT * from roupas")
         await connection.end()
         res.send(result)
     } catch (e) {
         res.status(500).send("Server ERROR")
     }
 })
-app.post("/produtos", async (req, res) => {
+app.post("/roupas", async (req, res) => {
     try {
         const connection = await mysql.createConnection({
             host: process.env.dbhost ? process.env.dbhost : "localhost",
@@ -34,7 +34,7 @@ app.post("/produtos", async (req, res) => {
         })
         const {id,nome,descricao,preco,imagem} = req.body
         const [result, fields] = 
-                    await connection.query("INSERT INTO produtos VALUES (?,?,?,?,?)",
+                    await connection.query("INSERT INTO roupas VALUES (?,?,?,?,?)",
                             [id,nome,descricao,preco,imagem])
         await connection.end()
         res.send(result)
@@ -44,8 +44,7 @@ app.post("/produtos", async (req, res) => {
     }
 })
 
-
-app.get("/usuarios", async (req, res) => {
+app.get("/lista", async (req, res) => {
     try {
         const connection = await mysql.createConnection({
             host: process.env.dbhost ? process.env.dbhost : "localhost",
@@ -54,7 +53,7 @@ app.get("/usuarios", async (req, res) => {
             database: process.env.dbname ? process.env.dbname : "banco1022a",
             port: process.env.dbport ? parseInt(process.env.dbport) : 3306
         })
-        const [result, fields] = await connection.query("SELECT * from usuarios")
+        const [result, fields] = await connection.query("SELECT * from lista")
         await connection.end()
         res.send(result)
     } catch (e) {
