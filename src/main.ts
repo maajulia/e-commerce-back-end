@@ -44,23 +44,35 @@ app.post("/roupas", async (req, res) => {
     }
 })
 
+// deletar
+app.delete("/produtos/:id", async (req, res) => {
+    try {
+        const connection = await mysql.createConnection({
+            host: process.env.dbhost ? process.env.dbhost : "aiven",
+            user: process.env.dbuser ? process.env.dbuser : "root",
+            password: process.env.dbpassword ? process.env.dbpassword : "",
+            database: process.env.dbname ? process.env.dbname : "banco1022a",
+            port: process.env.dbport ? parseInt(process.env.dbport) : 21978
+        });
 
-//DELETAR
-app.delete("/produtos/:id",async(req,res)=>{
-    try{
-        const banco = new BancoMysql()
-        await banco.criarConexao()
-        const result = await banco.excluir(req.params.id)
-        await banco.finalizarConexao()
-        res.status(200).send("Produto excluido com sucesso id: "+req.params.id)
-    }
-    catch(e){
-        console.log(e)
-        res.status(500).send("Erro ao excluir")
-    }
-    
-})
+        // Especificando o tipo do resultado
+        const [result]: any = await connection.query(
+            "DELETE FROM produtos WHERE id = ?",
+            [req.params.id]
+        );
 
+        await connection.end();
+
+        if (result.affectedRows > 0) {
+            res.status(200).send("Produto excluído com sucesso id: " + req.params.id);
+        } else {
+            res.status(404).send("Produto não encontrado id: " + req.params.id);
+        }
+    } catch (e) {
+        console.log(e);
+        res.status(500).send("Erro no servidor");
+    }
+});
 
 //alterar
 app.put("/produtos/:id", async (req, res) => {
