@@ -45,6 +45,52 @@ app.post("/roupas", async (req, res) => {
 })
 
 
+//DELETAR
+app.delete("/produtos/:id",async(req,res)=>{
+    try{
+        const banco = new BancoMysql()
+        await banco.criarConexao()
+        const result = await banco.excluir(req.params.id)
+        await banco.finalizarConexao()
+        res.status(200).send("Produto excluido com sucesso id: "+req.params.id)
+    }
+    catch(e){
+        console.log(e)
+        res.status(500).send("Erro ao excluir")
+    }
+    
+})
+
+
+//alterar
+app.put("/produtos/:id", async (req, res) => {
+    try {
+        const connection = await mysql.createConnection({
+            host: process.env.dbhost ? process.env.dbhost : "aiven",
+            user: process.env.dbuser ? process.env.dbuser : "root",
+            password: process.env.dbpassword ? process.env.dbpassword : "",
+            database: process.env.dbname ? process.env.dbname : "banco1022a",
+            port: process.env.dbport ? parseInt(process.env.dbport) : 21978
+        });
+
+        const { nome, descricao, preco, imagem } = req.body;
+        const produto = { nome, descricao, preco, imagem };
+
+        const [result] = await connection.query(
+            "UPDATE produtos SET nome = ?, descricao = ?, preco = ?, imagem = ? WHERE id = ?",
+            [produto.nome, produto.descricao, produto.preco, produto.imagem, req.params.id]
+        );
+
+        await connection.end();
+        res.status(200).send("Produto alterado com sucesso id: " + req.params.id);
+    } catch (e) {
+        console.log(e);
+        res.status(500).send("Erro no servidor");
+    }
+});
+
+
+
 app.listen(8000, () => {
     console.log("Iniciei o servidor")
 })
