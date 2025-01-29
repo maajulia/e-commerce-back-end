@@ -7,7 +7,7 @@ const app = express()
 app.use(express.json())
 app.use(cors())
 
-app.get("/produtos", async (req, res) => {
+app.get("/roupas", async (req, res) => {
     try {
         const banco = new BancoMysql()
         await banco.criarConexao()
@@ -19,7 +19,7 @@ app.get("/produtos", async (req, res) => {
         res.status(500).send("Server ERROR")
     }
 })
-app.get("/produtos/:id", async (req, res) => {
+app.get("/roupas/:id", async (req, res) => {
     try {
         
         const banco = new BancoMysql()
@@ -32,7 +32,7 @@ app.get("/produtos/:id", async (req, res) => {
         res.status(500).send("Server ERROR")
     }
 })
-app.post("/produtos", async (req, res) => {
+app.post("/roupas", async (req, res) => {
     try {
         const {id,nome,descricao,preco,imagem,cor,composicao,tamanhos,estoque} = req.body
         const banco = new BancoMysql()
@@ -48,7 +48,7 @@ app.post("/produtos", async (req, res) => {
 })
 
 //DELETAR
-app.delete("/produtos/:id",async(req,res)=>{
+app.delete("/roupas/:id",async(req,res)=>{
     try{
         const banco = new BancoMysql()
         await banco.criarConexao()
@@ -64,7 +64,7 @@ app.delete("/produtos/:id",async(req,res)=>{
 })
 
 //ALTERAR
-app.put("/produtos/:id",async(req,res)=>{
+app.put("/roupas/:id",async(req,res)=>{
     const {nome,descricao,preco,imagem,cor,composicao,tamanhos,estoque} = req.body
     const produto = {nome,descricao,preco,imagem,cor,composicao,tamanhos,estoque}
     const banco = new BancoMysql()
