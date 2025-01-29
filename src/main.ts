@@ -101,6 +101,31 @@ app.put("/produtos/:id", async (req, res) => {
     }
 });
 
+app.post("/cadastro", async (req, res) => {
+    try {
+
+        const { nome, telefone, endereco, cpf }: { nome: string, telefone: string, endereco: string, cpf: string } = req.body;
+        
+        const connection = await mysql.createConnection({
+            host: process.env.dbhost ? process.env.dbhost : "aiven",
+            user: process.env.dbuser ? process.env.dbuser : "root",
+            password: process.env.dbpassword ? process.env.dbpassword : "",
+            database: process.env.dbname ? process.env.dbname : "banco1022a",
+            port: process.env.dbport ? parseInt(process.env.dbport) : 21978
+        })
+      // Insere os dados na tabela 'usuarios'
+      const [result] = await connection.query(
+        "INSERT INTO usuarios (nome, telefone, endereco, cpf) VALUES (?, ?, ?, ?)",
+        [nome, telefone, endereco, cpf]
+    );
+
+    await connection.end();
+    res.status(201).send("Usuário cadastrado com sucesso!");
+} catch (e) {
+    console.log(e);
+    res.status(500).send("Erro no servidor ao cadastrar usuário.");
+}
+});
 
 
 app.listen(8000, () => {
