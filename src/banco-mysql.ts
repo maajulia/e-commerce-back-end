@@ -24,28 +24,28 @@ class BancoMysql{
     }
     async listar(){
         if(!this.connection) throw new Error("Erro de conexão com o banco de dados.")
-        const [result, fields] = await this.connection.query("SELECT * FROM produtos")
+        const [result, fields] = await this.connection.query("SELECT * FROM roupas")
         return result
     }
     async inserir(produto:{id:number,nome:string,descricao:string,preco:string,imagem:string,cor:string,composicao:string,tamanhos:number, estoque:number}){
         if(!this.connection) throw new Error("Erro de conexão com o banco de dados.")
-        const [result, fields] = await this.connection.query("INSERT INTO produtos VALUES (?,?,?,?,?)",[produto.id,produto.nome,produto.descricao,produto.preco,produto.imagem,produto.cor,produto.composicao,produto.tamanhos,produto.estoque])
+        const [result, fields] = await this.connection.query("INSERT INTO roupas VALUES (?,?,?,?,?)",[produto.id,produto.nome,produto.descricao,produto.preco,produto.imagem,produto.cor,produto.composicao,produto.tamanhos,produto.estoque])
         return result
     }
     async excluir(id:string){
         if(!this.connection) throw new Error("Erro de conexão com o banco de dados.")
-        const [result, fields] = await this.connection.query("DELETE FROM produtos WHERE id = ?",[id])
+        const [result, fields] = await this.connection.query("DELETE FROM roupas WHERE id = ?",[id])
         return result
     }
     async alterar(id:string,produto:{id?:string,nome:string,descricao:string,preco:string,imagem:string,cor:string,composicao:string,tamanhos:number, estoque:number}){
         if(!this.connection) throw new Error("Erro de conexão com o banco de dados.")
-        const [result, fields] = await this.connection.query("UPDATE produtos SET nome=?,descricao=?,preco=?,imagem=? WHERE id=?",[produto.nome,produto.descricao,produto.preco,produto.imagem,id, produto.cor,produto.composicao,produto.tamanhos,produto.estoque])
+        const [result, fields] = await this.connection.query("UPDATE roupas SET nome=?,descricao=?,preco=?,imagem=? WHERE id=?",[produto.nome,produto.descricao,produto.preco,produto.imagem,id, produto.cor,produto.composicao,produto.tamanhos,produto.estoque])
         return result
         
     }
     async listarPorId(id:string){
         if(!this.connection) throw new Error("Erro de conexão com o banco de dados.")
-        const [result, fields] = await this.connection.query("SELECT * FROM produtos WHERE id = ?",[id]) as RowDataPacket[]
+        const [result, fields] = await this.connection.query("SELECT * FROM roupas WHERE id = ?",[id]) as RowDataPacket[]
         return result[0]
     }
 }
